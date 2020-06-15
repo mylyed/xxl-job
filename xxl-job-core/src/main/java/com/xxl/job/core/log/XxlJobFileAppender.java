@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class XxlJobFileAppender {
 	private static Logger logger = LoggerFactory.getLogger(XxlJobFileAppender.class);
-	
+
 	// for JobThread (support log for child thread of job handler)
 	//public static ThreadLocal<String> contextHolder = new ThreadLocal<String>();
 	public static final InheritableThreadLocal<String> contextHolder = new InheritableThreadLocal<String>();
@@ -35,6 +35,13 @@ public class XxlJobFileAppender {
 	 */
 	private static String logBasePath = "/data/applogs/xxl-job/jobhandler";
 	private static String glueSrcPath = logBasePath.concat("/gluesource");
+
+	/**
+	 * 初始化日志地址
+	 *
+	 * 实际就是创建日志文件夹 和胶水文件存放目录
+	 * @param logPath
+	 */
 	public static void initLogPath(String logPath){
 		// init
 		if (logPath!=null && logPath.trim().length()>0) {
@@ -113,7 +120,7 @@ public class XxlJobFileAppender {
 			appendLog = "";
 		}
 		appendLog += "\r\n";
-		
+
 		// append file content
 		FileOutputStream fos = null;
 		try {
@@ -131,7 +138,7 @@ public class XxlJobFileAppender {
 				}
 			}
 		}
-		
+
 	}
 
 	/**

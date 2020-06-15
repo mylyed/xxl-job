@@ -10,6 +10,9 @@ public class RegistryParam implements Serializable {
 
     private String registryGroup;
     private String registryKey;
+    /**
+     * job handler 地址+端口
+     */
     private String registryValue;
 
     public RegistryParam(){}

@@ -13,10 +13,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
+ * 核心
+ *
  * @author xuxueli 2018-10-28 00:18:17
  */
 
-public class XxlJobScheduler  {
+public class XxlJobScheduler {
     private static final Logger logger = LoggerFactory.getLogger(XxlJobScheduler.class);
 
 
@@ -24,19 +26,21 @@ public class XxlJobScheduler  {
         // init i18n
         initI18n();
 
-        // admin registry monitor run
+        // admin registry monitor run 注册
         JobRegistryMonitorHelper.getInstance().start();
 
-        // admin fail-monitor run
+        // admin fail-monitor run  任务失败告警
         JobFailMonitorHelper.getInstance().start();
 
         // admin lose-monitor run
         JobLosedMonitorHelper.getInstance().start();
 
         // admin trigger pool start
+        //仅仅是初始化线程池
         JobTriggerPoolHelper.toStart();
 
         // admin log report start
+        //执行统计日志
         JobLogReportHelper.getInstance().start();
 
         // start-schedule
@@ -45,7 +49,7 @@ public class XxlJobScheduler  {
         logger.info(">>>>>>>>> init xxl-job admin success.");
     }
 
-    
+
     public void destroy() throws Exception {
 
         // stop-schedule
@@ -70,17 +74,19 @@ public class XxlJobScheduler  {
 
     // ---------------------- I18n ----------------------
 
-    private void initI18n(){
-        for (ExecutorBlockStrategyEnum item:ExecutorBlockStrategyEnum.values()) {
+    private void initI18n() {
+        for (ExecutorBlockStrategyEnum item : ExecutorBlockStrategyEnum.values()) {
+            //枚举初始化
             item.setTitle(I18nUtil.getString("jobconf_block_".concat(item.name())));
         }
     }
 
     // ---------------------- executor-client ----------------------
     private static ConcurrentMap<String, ExecutorBiz> executorBizRepository = new ConcurrentHashMap<String, ExecutorBiz>();
+
     public static ExecutorBiz getExecutorBiz(String address) throws Exception {
         // valid
-        if (address==null || address.trim().length()==0) {
+        if (address == null || address.trim().length() == 0) {
             return null;
         }
 

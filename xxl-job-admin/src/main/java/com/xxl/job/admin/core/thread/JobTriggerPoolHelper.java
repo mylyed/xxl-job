@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * job trigger thread pool helper
+ * 作业触发器线程池帮助程序
  *
  * @author xuxueli 2018-07-03 21:08:07
  */
@@ -78,8 +79,12 @@ public class JobTriggerPoolHelper {
 
         // choose thread pool
         ThreadPoolExecutor triggerPool_ = fastTriggerPool;
+
+        //大于500毫秒的次数
         AtomicInteger jobTimeoutCount = jobTimeoutCountMap.get(jobId);
-        if (jobTimeoutCount!=null && jobTimeoutCount.get() > 10) {      // job-timeout 10 times in 1 min
+        // job-timeout 10 times in 1 min
+        if (jobTimeoutCount!=null && jobTimeoutCount.get() > 10) {
+            //大于10次定为慢任务
             triggerPool_ = slowTriggerPool;
         }
 
@@ -106,15 +111,16 @@ public class JobTriggerPoolHelper {
 
                     // incr timeout-count-map
                     long cost = System.currentTimeMillis()-start;
-                    if (cost > 500) {       // ob-timeout threshold 500ms
+                    if (cost > 500) {
+
+                        // ob-timeout threshold 500ms
                         AtomicInteger timeoutCount = jobTimeoutCountMap.putIfAbsent(jobId, new AtomicInteger(1));
                         if (timeoutCount != null) {
                             timeoutCount.incrementAndGet();
                         }
                     }
-
+                    // todo
                 }
-
             }
         });
     }

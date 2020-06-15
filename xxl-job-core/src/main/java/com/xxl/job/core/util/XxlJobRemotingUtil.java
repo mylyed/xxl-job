@@ -12,9 +12,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.Map;
 
 /**
+ * HTTP 请求工具类
+ *
  * @author xuxueli 2018-11-25 00:55:31
  */
 public class XxlJobRemotingUtil {
@@ -34,17 +35,24 @@ public class XxlJobRemotingUtil {
             logger.error(e.getMessage(), e);
         }
         connection.setHostnameVerifier(new HostnameVerifier() {
+            @Override
             public boolean verify(String hostname, SSLSession session) {
                 return true;
             }
         });
     }
+
     private static final TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+        @Override
         public java.security.cert.X509Certificate[] getAcceptedIssuers() {
             return new java.security.cert.X509Certificate[]{};
         }
+
+        @Override
         public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
         }
+
+        @Override
         public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
         }
     }};
@@ -61,7 +69,7 @@ public class XxlJobRemotingUtil {
      * @param returnTargClassOfT
      * @return
      */
-    public static ReturnT postBody(String url, String accessToken, int timeout, Object requestObj, Class returnTargClassOfT) {
+    public static <T> ReturnT<T> postBody(String url, String accessToken, int timeout, Object requestObj, Class<T> returnTargClassOfT) {
         HttpURLConnection connection = null;
         BufferedReader bufferedReader = null;
         try {
@@ -87,7 +95,7 @@ public class XxlJobRemotingUtil {
             connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             connection.setRequestProperty("Accept-Charset", "application/json;charset=UTF-8");
 
-            if(accessToken!=null && accessToken.trim().length()>0){
+            if (accessToken != null && accessToken.trim().length() > 0) {
                 connection.setRequestProperty(XXL_JOB_ACCESS_TOKEN, accessToken);
             }
 
@@ -114,7 +122,7 @@ public class XxlJobRemotingUtil {
             // valid StatusCode
             int statusCode = connection.getResponseCode();
             if (statusCode != 200) {
-                return new ReturnT<String>(ReturnT.FAIL_CODE, "xxl-rpc remoting fail, StatusCode("+ statusCode +") invalid. for url : " + url);
+                return new ReturnT<>(ReturnT.FAIL_CODE, "xxl-rpc remoting fail, StatusCode(" + statusCode + ") invalid. for url : " + url);
             }
 
             // result
@@ -128,16 +136,16 @@ public class XxlJobRemotingUtil {
 
             // parse returnT
             try {
-                ReturnT returnT = GsonTool.fromJson(resultJson, ReturnT.class, returnTargClassOfT);
+                ReturnT<T> returnT = GsonTool.fromJson(resultJson, ReturnT.class, returnTargClassOfT);
                 return returnT;
             } catch (Exception e) {
-                logger.error("xxl-rpc remoting (url="+url+") response content invalid("+ resultJson +").", e);
-                return new ReturnT<String>(ReturnT.FAIL_CODE, "xxl-rpc remoting (url="+url+") response content invalid("+ resultJson +").");
+                logger.error("xxl-rpc remoting (url=" + url + ") response content invalid(" + resultJson + ").", e);
+                return new ReturnT<>(ReturnT.FAIL_CODE, "xxl-rpc remoting (url=" + url + ") response content invalid(" + resultJson + ").");
             }
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "xxl-rpc remoting error("+ e.getMessage() +"), for url : " + url);
+            return new ReturnT<>(ReturnT.FAIL_CODE, "xxl-rpc remoting error(" + e.getMessage() + "), for url : " + url);
         } finally {
             try {
                 if (bufferedReader != null) {

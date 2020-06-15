@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 日志文件清除线程
  * job file clean thread
  *
  * @author xuxueli 2017-12-29 16:23:43
@@ -89,6 +90,7 @@ public class JobLogFileCleanThread {
                     }
 
                     try {
+                        //一天检查一次
                         TimeUnit.DAYS.sleep(1);
                     } catch (InterruptedException e) {
                         if (!toStop) {

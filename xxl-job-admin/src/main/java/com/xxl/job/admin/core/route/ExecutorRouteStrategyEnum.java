@@ -4,7 +4,10 @@ import com.xxl.job.admin.core.route.strategy.*;
 import com.xxl.job.admin.core.util.I18nUtil;
 
 /**
- * Created by xuxueli on 17/3/10.
+ * 路由策略
+ *
+ * @author xuxueli
+ * @date 17/3/10
  */
 public enum ExecutorRouteStrategyEnum {
 

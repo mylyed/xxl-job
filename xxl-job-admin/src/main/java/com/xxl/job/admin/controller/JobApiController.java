@@ -58,9 +58,11 @@ public class JobApiController {
             List<HandleCallbackParam> callbackParamList = GsonTool.fromJson(data, List.class, HandleCallbackParam.class);
             return adminBiz.callback(callbackParamList);
         } else if ("registry".equals(uri)) {
+            //注册
             RegistryParam registryParam = GsonTool.fromJson(data, RegistryParam.class);
             return adminBiz.registry(registryParam);
         } else if ("registryRemove".equals(uri)) {
+            //jobhandler 下线
             RegistryParam registryParam = GsonTool.fromJson(data, RegistryParam.class);
             return adminBiz.registryRemove(registryParam);
         } else {

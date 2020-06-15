@@ -62,6 +62,7 @@ public class XxlJobTrigger {
 
         // cover addressList
         if (addressList!=null && addressList.trim().length()>0) {
+            //执行器地址类型：0=自动注册、1=手动录入
             group.setAddressType(1);
             group.setAddressList(addressList.trim());
         }

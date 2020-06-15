@@ -122,13 +122,25 @@ public class JobInfoController {
 	public ReturnT<String> pause(int id) {
 		return xxlJobService.stop(id);
 	}
-	
+
+	/**
+	 * 启动任务
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping("/start")
 	@ResponseBody
 	public ReturnT<String> start(int id) {
 		return xxlJobService.start(id);
 	}
-	
+
+	/**
+	 * 触发任务
+	 * @param id 任务编号
+	 * @param executorParam 执行参数
+	 * @param addressList 执行器地址
+	 * @return
+	 */
 	@RequestMapping("/trigger")
 	@ResponseBody
 	//@PermissionLimit(limit = false)

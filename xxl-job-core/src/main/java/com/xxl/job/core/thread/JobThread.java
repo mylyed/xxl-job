@@ -29,8 +29,10 @@ public class JobThread extends Thread{
 
 	private int jobId;
 	private IJobHandler handler;
+	//需要触发的任务队列
 	private LinkedBlockingQueue<TriggerParam> triggerQueue;
-	private Set<Long> triggerLogIdSet;		// avoid repeat trigger for the same TRIGGER_LOG_ID
+	// avoid repeat trigger for the same TRIGGER_LOG_ID
+	private Set<Long> triggerLogIdSet;
 
 	private volatile boolean toStop = false;
 	private String stopReason;
@@ -51,6 +53,8 @@ public class JobThread extends Thread{
 
     /**
      * new trigger to queue
+	 *
+	 * 把任务放进队列里面 直接返回
      *
      * @param triggerParam
      * @return

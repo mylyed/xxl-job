@@ -16,6 +16,7 @@ import java.util.Properties;
 
 /**
  * i18n util
+ * 国际化工具
  *
  * @author xuxueli 2018-01-17 20:39:06
  */

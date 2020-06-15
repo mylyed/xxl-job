@@ -30,11 +30,16 @@ public class JobRegistryMonitorHelper {
 			public void run() {
 				while (!toStop) {
 					try {
+						//注册中心自动刷新线程
+
 						// auto registry group
+						//0=自动注册
 						List<XxlJobGroup> groupList = XxlJobAdminConfig.getAdminConfig().getXxlJobGroupDao().findByAddressType(0);
 						if (groupList!=null && !groupList.isEmpty()) {
 
 							// remove dead address (admin/executor)
+
+							//删除90秒都没更新的节点
 							List<Integer> ids = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().findDead(RegistryConfig.DEAD_TIMEOUT, new Date());
 							if (ids!=null && ids.size()>0) {
 								XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().removeDead(ids);
@@ -82,6 +87,7 @@ public class JobRegistryMonitorHelper {
 						}
 					}
 					try {
+						//休息30秒
 						TimeUnit.SECONDS.sleep(RegistryConfig.BEAT_TIMEOUT);
 					} catch (InterruptedException e) {
 						if (!toStop) {

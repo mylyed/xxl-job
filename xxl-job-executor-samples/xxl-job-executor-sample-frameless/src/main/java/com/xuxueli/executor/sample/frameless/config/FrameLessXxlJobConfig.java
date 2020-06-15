@@ -49,6 +49,7 @@ public class FrameLessXxlJobConfig {
         xxlJobExecutor.setAppname(xxlJobProp.getProperty("xxl.job.executor.appname"));
         xxlJobExecutor.setAddress(xxlJobProp.getProperty("xxl.job.executor.address"));
         xxlJobExecutor.setIp(xxlJobProp.getProperty("xxl.job.executor.ip"));
+        //本机端口
         xxlJobExecutor.setPort(Integer.valueOf(xxlJobProp.getProperty("xxl.job.executor.port")));
         xxlJobExecutor.setLogPath(xxlJobProp.getProperty("xxl.job.executor.logpath"));
         xxlJobExecutor.setLogRetentionDays(Integer.valueOf(xxlJobProp.getProperty("xxl.job.executor.logretentiondays")));

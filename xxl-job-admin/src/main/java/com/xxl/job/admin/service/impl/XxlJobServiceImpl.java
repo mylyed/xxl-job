@@ -23,6 +23,7 @@ import java.text.ParseException;
 import java.util.*;
 
 /**
+ * 核心代码
  * core job action for xxl-job
  * @author xuxueli 2016-5-28 15:30:33
  */
@@ -90,7 +91,7 @@ public class XxlJobServiceImpl implements XxlJobService {
 			jobInfo.setGlueSource(jobInfo.getGlueSource().replaceAll("\r", ""));
 		}
 
-		// ChildJobId valid
+		// ChildJobId valid 子任务验证
         if (jobInfo.getChildJobId()!=null && jobInfo.getChildJobId().trim().length()>0) {
 			String[] childJobIds = jobInfo.getChildJobId().split(",");
 			for (String childJobIdItem: childJobIds) {
@@ -244,14 +245,22 @@ public class XxlJobServiceImpl implements XxlJobService {
 		return ReturnT.SUCCESS;
 	}
 
+	/**
+	 * 就是设置任务状态以及下次触发时间
+	 * @param id
+	 * @return
+	 */
 	@Override
 	public ReturnT<String> start(int id) {
+
 		XxlJobInfo xxlJobInfo = xxlJobInfoDao.loadById(id);
 
 		// next trigger time (5s后生效，避开预读周期)
 		long nextTriggerTime = 0;
 		try {
-			Date nextValidTime = new CronExpression(xxlJobInfo.getJobCron()).getNextValidTimeAfter(new Date(System.currentTimeMillis() + JobScheduleHelper.PRE_READ_MS));
+			Date nextValidTime = new CronExpression(xxlJobInfo.getJobCron())
+					//当前时间加预读时间
+					.getNextValidTimeAfter(new Date(System.currentTimeMillis() + JobScheduleHelper.PRE_READ_MS));
 			if (nextValidTime == null) {
 				return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_never_fire"));
 			}
@@ -260,9 +269,11 @@ public class XxlJobServiceImpl implements XxlJobService {
 			logger.error(e.getMessage(), e);
 			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid")+" | "+ e.getMessage());
 		}
-
+		// 调度状态：0-停止，1-运行
 		xxlJobInfo.setTriggerStatus(1);
+		//上次调度时间
 		xxlJobInfo.setTriggerLastTime(0);
+		//下次真正调度的时间
 		xxlJobInfo.setTriggerNextTime(nextTriggerTime);
 
 		xxlJobInfo.setUpdateTime(new Date());

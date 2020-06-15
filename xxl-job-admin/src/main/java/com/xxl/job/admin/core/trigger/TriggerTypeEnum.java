@@ -3,6 +3,11 @@ package com.xxl.job.admin.core.trigger;
 import com.xxl.job.admin.core.util.I18nUtil;
 
 /**
+ * jobconf_trigger_type_cron=Cron触发
+ * jobconf_trigger_type_manual=手动触发
+ * jobconf_trigger_type_parent=父任务触发
+ * jobconf_trigger_type_api=API触发
+ * jobconf_trigger_type_retry=失败重试触发
  * trigger type enum
  *
  * @author xuxueli 2018-09-16 04:56:41
